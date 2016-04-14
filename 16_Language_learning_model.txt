@@ -1,0 +1,35 @@
+I have three tables;
+
+USER
+columns:
+	id
+	Name
+
+FLUENT_IN
+columns:
+	id
+	language
+	UserId
+
+WANTS_TO_LEARN
+columns:
+	id
+	language
+	UserId
+
+Relations will be;
+
+USER.hasMany(FLUENT_IN)
+(FLUENT_IN).belongsTo(USER)
+
+USER.hasMany(WANTS_TO_LEARN)
+(WANTS_TO_LEARN).belongsTo(USER)
+
+So, first we check which user is interesting for the logged-in user.
+
+	when a user logs in I will have a function loop through the WANTS_TO_LEARN table, returning the languages where the UserId === user.session.id. Then, for each item in this array another function will loop through the FLUENT_IN table and will return the UserId where language is the same value and where UserId is NOT equal to user.session.id. We will store this data in a variable called matchFirstPart
+
+Now you have a selection of the users who are interesting to the person who is logged in. but it also has to be the other way around. 
+
+	Now I will have a function loop through the FLUENT_IN table and return the languages the logged in user is fluent in. We will store this in a variable currentUserFluentIn.
+	Now for each UserId in matchFirstPart I will have another function loop through the WANTS_TO_LEARN table again and return the languages where the UserId is the same. If the returned language is equal to any language in the currentUserFluentIn array, loop through the users table and return the name where the UserId (from matchFirstPart) is equal to the user.id
